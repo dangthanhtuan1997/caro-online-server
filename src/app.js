@@ -4,9 +4,12 @@ const config = require('./config/config');
 const routes = require('./api');
 const passport = require('./config/passport.config');
 const mongoose = require('mongoose');
-var cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
+const cors = require('cors');
 
 const app = express();
+
+app.use(cors());
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -15,6 +18,12 @@ app.use(bodyParser.json());
 app.use(config.api.prefix, routes());
 
 app.use(cookieParser());
+
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "YOUR-DOMAIN.TLD");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+  });
 
 // Connecting to the database
 mongoose.connect(config.databaseURL, {

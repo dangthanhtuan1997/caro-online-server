@@ -5,9 +5,14 @@ const jwt = require('jsonwebtoken');
 const passport = require('../config/passport.config');
 const User = require('../user/user.model');
 const config = require('../config/config');
+const cors = require('cors');
 
 module.exports = (app) => {
     app.use(router);
+
+    router.get('/welcome', (req, res) => {
+        res.status(200).json({message: 'ok'});
+    });
 
     router.post('/register', (req, res) => {
         if (req.body.password != req.body.confirmPassword) {
@@ -33,6 +38,7 @@ module.exports = (app) => {
     router.post('/login', (req, res) => {
         passport.authenticate('local', { session: false }, (err, user, info) => {
             if (err || !user) {
+                console.log(req.body);
                 return res.status(401).json({
                     message: info ? info.message : 'Login failed'
                 });
