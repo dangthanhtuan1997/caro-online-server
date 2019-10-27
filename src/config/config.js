@@ -18,4 +18,6 @@ var api = {
     prefix: '/api'
 }
 
-module.exports = {port, databaseURL, jwtSecret, api};
+var saltRounds = 10;
+
+module.exports = {port, databaseURL, jwtSecret, api, saltRounds};

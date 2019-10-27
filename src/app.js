@@ -4,6 +4,7 @@ const config = require('./config/config');
 const routes = require('./api');
 const passport = require('./config/passport.config');
 const mongoose = require('mongoose');
+var cookieParser = require('cookie-parser')
 
 const app = express();
 
@@ -12,6 +13,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use(config.api.prefix, routes());
+
+app.use(cookieParser());
 
 // Connecting to the database
 mongoose.connect(config.databaseURL, {
