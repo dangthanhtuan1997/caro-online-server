@@ -9,7 +9,7 @@ const config = require('../config/config');
 module.exports = (app) => {
     app.use('/users', router);
 
-    router.get('/me', passport.authenticate('jwt', { session: false }), (req, res) => {
+    router.post('/me', passport.authenticate('jwt', { session: false }), (req, res) => {
         return res.status(200).json(req.user);
     });
     
@@ -31,7 +31,7 @@ module.exports = (app) => {
                 if (err) {
                     return res.status(500).json(err);
                 }
-                res.status(200).json({ message: 'Update user: ' + req.body.username + ' success' });
+                res.status(200).json({ message: 'Update user: ' + user.username + ' success' });
             });
         });
     });
