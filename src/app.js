@@ -37,6 +37,10 @@ mongoose.connect(config.databaseURL, {
 
 app.use(passport.initialize());
 
+app.use('/', (req,res)=>{
+    res.status(200).send('Server is running....');
+});
+
 app.listen(config.port, err => {
     if (err) {
         console.log(err);
