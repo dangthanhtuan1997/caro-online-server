@@ -8,6 +8,7 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 
 const app = express();
+const PORT = process.env.PORT||config.port;
 
 app.use(cors());
 
@@ -41,11 +42,11 @@ app.use('/', (req,res)=>{
     res.status(200).send('Server is running....');
 });
 
-app.listen(config.port, err => {
+app.listen(PORT, err => {
     if (err) {
         console.log(err);
         process.exit(1);
         return;
     }
-    console.log('App running at port: ' + config.port);
+    console.log('App running at port: ' + PORT);
 });
