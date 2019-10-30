@@ -7,7 +7,8 @@ var UserSchema = new mongoose.Schema(
         email: String,
         dateOfBirth: String,
         sex: String,
-        password: String
+        password: String,
+        facebookId: String
     },
     {
         timestamps: true

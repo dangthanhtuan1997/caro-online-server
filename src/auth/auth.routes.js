@@ -7,7 +7,15 @@ const User = require('../user/user.model');
 const config = require('../config/config');
 
 module.exports = (app) => {
-    app.use(router);
+    app.use('/auth', router);
+
+    router.get('/facebook', passport.authenticate('facebook', { session: false }));
+
+    router.get('/facebook/callback', passport.authenticate('facebook', {
+        session: false,
+        successRedirect: '/',
+        failureRedirect: '/login'
+    }));
 
     router.post('/register', (req, res) => {
         if (req.body.password != req.body.confirmPassword) {
@@ -44,7 +52,7 @@ module.exports = (app) => {
                 }
                 const userModified = user.toObject();
                 delete userModified.password;
-                const token = jwt.sign(userModified, config.jwtSecret, {expiresIn: '7d'});
+                const token = jwt.sign(userModified, config.jwtSecret, { expiresIn: '7d' });
                 return res.json({ userModified, token });
             });
         })(req, res);
