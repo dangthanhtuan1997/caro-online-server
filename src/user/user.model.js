@@ -8,7 +8,9 @@ var UserSchema = new mongoose.Schema(
         dateOfBirth: String,
         sex: String,
         password: String,
-        facebookId: String
+        facebookId: String,
+        userImage: String,
+        role: { type: String, default: 'user' }
     },
     {
         timestamps: true

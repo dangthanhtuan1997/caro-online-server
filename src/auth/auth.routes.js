@@ -18,6 +18,14 @@ module.exports = (app) => {
     }));
 
     router.post('/register', (req, res) => {
+        if (req.body.password == '') {
+            return res.status(401).json({ message: 'Password is empty' });
+        }
+        if (req.body.password.length < 6) {
+            return res
+                .status(401)
+                .json({ message: 'Passwords must be at least 6 characters' });
+        }
         if (req.body.password != req.body.confirmPassword) {
             return res.status(401).json({ message: 'Password and confirm password is not match' });
         }
