@@ -7,7 +7,6 @@ const User = require('../user/user.model');
 const config = require('../config/config');
 const fetch = require('node-fetch');
 
-
 module.exports = (app) => {
     app.use('/auth', router);
 
@@ -33,7 +32,7 @@ module.exports = (app) => {
                 return res.status(201).json(user, token);
             });
         } else {
-            res.status(403).json({ message: 'fail' });
+            res.status(403).json({ message: 'Fake information' });
         }
     })
 
