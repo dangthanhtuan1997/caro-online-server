@@ -8,6 +8,7 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 
 const app = express();
+
 const PORT = process.env.PORT||config.port;
 
 app.use('/uploads', express.static('uploads'));

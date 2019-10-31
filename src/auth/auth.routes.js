@@ -19,7 +19,9 @@ module.exports = (app) => {
         if (json.id === userID) {
             existUser = await User.findOne({ facebookId: userID });
             if (existUser) {
-                return res.status(200).json(existUser);
+                const userModified = existUser.toObject();
+                const token = jwt.sign(userModified, config.jwtSecret, { expiresIn: '7d' });
+                return res.status(200).json({userModified, token});
             }
             const newUser = new User({
                 name: json.name,
@@ -28,8 +30,9 @@ module.exports = (app) => {
             });
             newUser.save((err, user) => {
                 if (err) { return res.status(500).json(err) }
+                const userModified = user.toObject();
                 const token = jwt.sign(userModified, config.jwtSecret, { expiresIn: '7d' });
-                return res.status(201).json(user, token);
+                return res.status(201).json({userModified, token});
             });
         } else {
             res.status(403).json({ message: 'Fake information' });
