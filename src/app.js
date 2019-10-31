@@ -9,7 +9,7 @@ const cors = require('cors');
 
 const app = express();
 
-const PORT = process.env.PORT||config.port;
+const PORT = process.env.PORT || config.port;
 
 app.use('/uploads', express.static('uploads'));
 
@@ -24,7 +24,9 @@ app.use(config.api.prefix, routes());
 app.use(cookieParser());
 
 app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "YOUR-DOMAIN.TLD");
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header('Access-Control-Allow-Credentials', true);
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
@@ -41,7 +43,7 @@ mongoose.connect(config.databaseURL, {
 
 app.use(passport.initialize());
 
-app.use('/', (req, res)=>{
+app.use('/', (req, res) => {
     res.sendFile(__dirname + '/index.html');
 })
 
