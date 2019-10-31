@@ -40,25 +40,25 @@ passport.use(new JwtStrategy(jwtOptions, (jwt_payload, next) => {
 	});
 }));
 
-passport.use(new FacebookStrategy({
-	clientID: config.FACEBOOK.FACEBOOK_APP_ID,
-	clientSecret: config.FACEBOOK.FACEBOOK_APP_SECRET,
-	callbackURL: config.FACEBOOK.CALLBACK_URL,
-	profileFields: ['id', 'displayName', 'photos', 'email']
-},
-	async function (accessToken, refreshToken, profile, done) {
-		var user = await User.findOne({ facebookId: profile._json.id });
+// passport.use(new FacebookStrategy({
+// 	clientID: config.FACEBOOK.FACEBOOK_APP_ID,
+// 	clientSecret: config.FACEBOOK.FACEBOOK_APP_SECRET,
+// 	callbackURL: config.FACEBOOK.CALLBACK_URL,
+// 	profileFields: ['id', 'displayName', 'photos', 'email']
+// },
+// 	async function (accessToken, refreshToken, profile, done) {
+// 		var user = await User.findOne({ facebookId: profile._json.id });
 
-		if (user) {
-			return done(null, user);
-		}
+// 		if (user) {
+// 			return done(null, user);
+// 		}
 
-		const newUser = new User({ name: profile._json.name, facebookId: profile._json.id });
-		newUser.save((err, user) => {
-			if (err) { return done(err) }
-			return done(null, user);
-		});
-	}
-));
+// 		const newUser = new User({ name: profile._json.name, facebookId: profile._json.id });
+// 		newUser.save((err, user) => {
+// 			if (err) { return done(err) }
+// 			return done(null, user);
+// 		});
+// 	}
+// ));
 
 module.exports = passport;

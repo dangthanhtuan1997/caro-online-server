@@ -34,7 +34,7 @@ const upload = multer({
 module.exports = (app) => {
     app.use('/users', router);
 
-    router.post('/me', passport.authenticate('jwt', { session: false }), (req, res) => {
+    router.get('/me', passport.authenticate('jwt', { session: false }), (req, res) => {
         return res.status(200).json(req.user);
     });
 

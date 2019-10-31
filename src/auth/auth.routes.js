@@ -5,17 +5,43 @@ const jwt = require('jsonwebtoken');
 const passport = require('../config/passport.config');
 const User = require('../user/user.model');
 const config = require('../config/config');
+const fetch = require('node-fetch');
 
 module.exports = (app) => {
     app.use('/auth', router);
 
-    router.get('/facebook', passport.authenticate('facebook', { session: false }));
+    // router.get('/facebook', passport.authenticate('facebook', { session: false }));
 
-    router.get('/facebook/callback', passport.authenticate('facebook', {
-        session: false,
-        successRedirect: '/',
-        failureRedirect: '/login'
-    }));
+    // router.get('/facebook/callback', passport.authenticate('facebook', {
+    //     session: false,
+    //     successRedirect: '/',
+    //     failureRedirect: '/login'
+    // }));
+
+    router.post('/login-with-facebook', async (req, res) => {
+        const { accessToken, userID } = req.body
+
+        const response = await fetch(`https://graph.facebook.com/v5.0/me?access_token=${accessToken}&fields=name%2C%20email&method=get&pretty=0&sdk=joey&suppress_http_code=1`);
+        const json = await response.json();
+
+        if (json.id === userID) {
+            existUser = await User.findOne({ facebookId: userID });
+            if (existUser) {
+                return res.status(200).json(existUser);
+            }
+            const newUser = new User({
+                name: json.name,
+                facebookId: json.id,
+                email: json.email
+            });
+            newUser.save((err, user) => {
+                if (err) { return res.status(500).json(err) }
+                return res.status(201).json(user);
+            });
+        } else {
+            res.status(403).json({ message: 'fail' });
+        }
+    })
 
     router.post('/register', (req, res) => {
         if (req.body.password == '') {
