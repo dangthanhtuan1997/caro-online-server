@@ -20,4 +20,4 @@ var api = {
 
 var saltRounds = 10;
 
-module.exports = {port, databaseURL, jwtSecret, api, saltRounds, FACEBOOK};
+module.exports = {port, databaseURL, jwtSecret, api, saltRounds};
