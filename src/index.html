@@ -7,7 +7,6 @@
         function loginWithFacebook() {
             FB.login(response => {
                 const { authResponse: { accessToken, userID } } = response;
-                console.log(response);
                 fetch(`${url}/api/auth/login-with-facebook`, {
                     method: 'POST',
                     headers: {
@@ -15,10 +14,6 @@
                     },
                     body: JSON.stringify({ accessToken, userID })
                 })
-                FB.api('/me', { fields: 'name, email' }, function (response) {
-                    console.log(response);
-                    console.log(response.email);
-                });
             }, { scope: 'public_profile, email' });
             return false;
         }

@@ -7,16 +7,9 @@ const User = require('../user/user.model');
 const config = require('../config/config');
 const fetch = require('node-fetch');
 
+
 module.exports = (app) => {
     app.use('/auth', router);
-
-    // router.get('/facebook', passport.authenticate('facebook', { session: false }));
-
-    // router.get('/facebook/callback', passport.authenticate('facebook', {
-    //     session: false,
-    //     successRedirect: '/',
-    //     failureRedirect: '/login'
-    // }));
 
     router.post('/login-with-facebook', async (req, res) => {
         const { accessToken, userID } = req.body
@@ -36,7 +29,8 @@ module.exports = (app) => {
             });
             newUser.save((err, user) => {
                 if (err) { return res.status(500).json(err) }
-                return res.status(201).json(user);
+                const token = jwt.sign(userModified, config.jwtSecret, { expiresIn: '7d' });
+                return res.status(201).json(user, token);
             });
         } else {
             res.status(403).json({ message: 'fail' });

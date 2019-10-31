@@ -20,10 +20,4 @@ var api = {
 
 var saltRounds = 10;
 
-var FACEBOOK = {
-    FACEBOOK_APP_ID: '627664211100376',
-    FACEBOOK_APP_SECRET: '04c38b0fc1dca0ef77fcc70fa185b2b9',
-    CALLBACK_URL : 'http://localhost:3000' + '/api/auth/facebook/callback'
-}
-
 module.exports = {port, databaseURL, jwtSecret, api, saltRounds, FACEBOOK};
