@@ -2,16 +2,15 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const config = require('./config/config');
 const routes = require('./api');
-const passport = require('./config/passport.config');
+const passport = require('./passport/passport');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
-
-const app = express();
+const { sendMessages } = require('./room/chat/chat');
+const { createRoom } = require('./room/room');
 
 const PORT = process.env.PORT || config.port;
-
-app.use('/uploads', express.static('uploads'));
+const app = express();
 
 app.use(cors());
 
@@ -23,6 +22,8 @@ app.use(config.api.prefix, routes());
 
 app.use(cookieParser());
 
+app.use(passport.initialize());
+
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header('Access-Control-Allow-Credentials', true);
@@ -31,7 +32,6 @@ app.use(function (req, res, next) {
     next();
 });
 
-// Connecting to the database
 mongoose.connect(config.databaseURL, {
     useNewUrlParser: true, useCreateIndex: true, useFindAndModify: false, useUnifiedTopology: true
 }).then(() => {
@@ -41,13 +41,7 @@ mongoose.connect(config.databaseURL, {
     process.exit();
 });
 
-app.use(passport.initialize());
-
-app.use('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html');
-})
-
-app.listen(PORT, err => {
+const server = app.listen(PORT, err => {
     if (err) {
         console.log(err);
         process.exit(1);
@@ -55,3 +49,13 @@ app.listen(PORT, err => {
     }
     console.log('App running at port: ' + PORT);
 });
+
+const io = require('socket.io').listen(server);
+
+io.on('connection', socket => {
+    console.log(socket.id + ' connected');
+
+    socket.on('send-message', data => sendMessages(io, data));
+
+    socket.on('create-room', data => createRoom(io, data));
+})
