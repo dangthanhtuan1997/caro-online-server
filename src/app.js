@@ -55,7 +55,7 @@ const io = require('socket.io').listen(server);
 io.on('connection', socket => {
     console.log(socket.id + ' connected');
 
-    socket.on('send-message', data => sendMessages(io, data));
+    socket.on('client-send-message', data => sendMessages(io, socket, data));
 
-    socket.on('create-room', data => createRoom(io, data));
+    socket.on('client-create-new-room', data => createRoom(io,socket, data));
 })

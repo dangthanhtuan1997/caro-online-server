@@ -17,7 +17,7 @@ const sendMessages = (io, data) => {
             }
         });
     })
-    io.emit('new-message', message.toString());
+    io.emit('server-send-new-message', message.toString());
 }
 
 module.exports = { sendMessages }
