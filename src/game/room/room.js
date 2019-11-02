@@ -24,7 +24,7 @@ const createNewRoom = async (io, socket) => {
         fisrtTurn: null,
         status: 'waitting'
     });
-    room.save();
+    await room.save();
 
     socket.join(room.name);
 

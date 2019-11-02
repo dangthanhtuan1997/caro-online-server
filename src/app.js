@@ -56,6 +56,7 @@ const server = app.listen(PORT, err => {
 const io = require('socket.io').listen(server);
 
 io.on('connection', socket => {
+    
     socket.emit('server-request-client-init-info');
 
     socket.on('client-send-init-info', data => init(socket, data));
@@ -71,6 +72,8 @@ io.on('connection', socket => {
     socket.on('client-leave-room', () => leaveAllRoom(io, socket));
 
     socket.on('client-exit-game', () => setPlayerStayIsWinner(io, socket));
+
+    socket.on('client-request-draw-game', () => setPlayerStayIsWinner(io, socket));
 
     socket.on('disconnect', () => setPlayerStayIsWinner(io, socket));
 })

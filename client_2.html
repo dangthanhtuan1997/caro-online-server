@@ -124,13 +124,11 @@
                 // Chuyển sang giao diện chơi game
             });
 
-            socket.on('server-send-turn', function (turn) {
+            socket.on('server-enable-your-turn', function (turn) {
                 $('#messages').append($('<li>').text(turn));
                 window.scrollTo(0, document.body.scrollHeight);
                 // Cho phép đánh
-                if (turn === _id) {
-                    $('#send-move').prop("disabled", false);
-                }
+                $('#send-move').prop("disabled", false);
             });
         });
     </script>

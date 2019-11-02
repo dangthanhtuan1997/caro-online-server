@@ -1,41 +1,49 @@
 const Room = require('./room/room.model');
 
 const startGame = async (io, socket) => {
+    socket.adapter.rooms[socket.socketRoomName].currentBoard = Array.from(Array(20), () => new Array(20));
+    socket.adapter.rooms[socket.socketRoomName].lastBoard = Array.from(Array(20), () => new Array(20));
+
     var room = await Room.findById(socket.socketRoomId);
+    socket.adapter.rooms[socket.socketRoomName].roomId = room._id;
     if (room) {
         socket.adapter.rooms[socket.socketRoomName].turns = [];
         socket.adapter.rooms[socket.socketRoomName].turns.push(room.fisrtTurn);
 
         if (room.fisrtTurn === 1) {
-            io.sockets.in(socket.socketRoomName).emit('server-send-turn', room.player_1);
+            socket.in(socket.socketRoomName).broadcast.emit('server-enable-your-turn');
         }
         else {
-            io.sockets.in(socket.socketRoomName).emit('server-send-turn', room.player_2);
+            socket.emit('server-enable-your-turn');
         }
     }
 }
 
-const sendCurrentTurnToAllClient = (io, socket) => {
-    var lastTurn = socket.adapter.rooms[socket.socketRoomName].turns.slice(-1)[0];
-    if (lastTurn === 1) {
-        socket.adapter.rooms[socket.socketRoomName].turns.push(2);
-        io.sockets.in(socket.socketRoomName).emit('server-send-turn', socket.adapter.rooms[socket.socketRoomName].player_2);
-    }
-    else {
-        socket.adapter.rooms[socket.socketRoomName].turns.push(1);
-        io.sockets.in(socket.socketRoomName).emit('server-send-turn', socket.adapter.rooms[socket.socketRoomName].player_1);
-    }
+const sendNextTurnToCompetitor = (io, socket) => {
+    socket.in(socket.socketRoomName).broadcast.emit('server-enable-your-turn');
 }
 const updateBoard = (io, socket, data) => {
-    console.log(data);
-    sendCurrentTurnToAllClient(io, socket);
+    // Player_1 default is 'X'
+    if (socket.adapter.rooms[socket.socketRoomName].currentBoard[data.x][data.y] === undefined) {
+        socket.adapter.rooms[socket.socketRoomName].lastBoard = socket.adapter.rooms[socket.socketRoomName].currentBoard;
+
+        if (socket.socketUserId === socket.adapter.rooms[socket.socketRoomName].player_1) {
+            socket.adapter.rooms[socket.socketRoomName].currentBoard[data.x][data.y] = 'X';
+        } else {
+            socket.adapter.rooms[socket.socketRoomName].currentBoard[data.x][data.y] = 'O';
+        }
+        sendNextTurnToCompetitor(io, socket);
+        io.sockets.in(socket.socketRoomName).emit('server-send-new-message', socket.socketUserName + ' đánh: ' + data.x + ';' + data.y);
+    }
 }
 
 const setPlayerStayIsWinner = async (io, socket) => {
     socket.leave(socket.socketRoomName);
+
     var playerExit = socket.socketUserId;
-    var roomId = socket.adapter.rooms[socket.socketRoomName].roomId;
+    var roomId = socket.socketRoomId;
     var room = await Room.findById(roomId);
+
     if (room) {
         room.winner = playerExit === room.player_1 ? room.player_2 : room.player_1;
         room.status = 'end';
@@ -43,4 +51,4 @@ const setPlayerStayIsWinner = async (io, socket) => {
     }
 }
 
-module.exports = { startGame, sendCurrentTurnToAllClient, updateBoard, setPlayerStayIsWinner }
+module.exports = { startGame, updateBoard, setPlayerStayIsWinner }
