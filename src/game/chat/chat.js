@@ -1,4 +1,4 @@
-const Room = require('../room.model');
+const Room = require('.././room/room.model');
 const Message = require('../chat/message.model');
 
 const sendMessages = async (io, socket, data) => {

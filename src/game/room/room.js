@@ -1,4 +1,5 @@
 const Room = require('./room.model');
+const {startGame} = require('../game');
 
 const init = (socket, data) => {
     socket.socketUserId = data.userId;
@@ -20,7 +21,7 @@ const createNewRoom = async (io, socket) => {
         player_2: null,
         messages: [],
         winner: null,
-        currentTurn: null,
+        fisrtTurn: null,
         status: 'waitting'
     });
     room.save();
@@ -33,7 +34,7 @@ const createNewRoom = async (io, socket) => {
     //set _id for room
     socket.adapter.rooms[socket.socketRoomName].RoomId = room._id;
 
-    socket.emit('server-send-room', room.toString());
+    socket.emit('server-send-room', room.name);
 }
 
 const joinRandomRoom = async (io, socket) => {
@@ -46,6 +47,7 @@ const joinRandomRoom = async (io, socket) => {
             found = true;
 
             socket.socketRoomName = r;
+            socket.socketRoomId = io.sockets.adapter.rooms[r].RoomId;
             socket.join(r);
 
             break;
@@ -57,14 +59,16 @@ const joinRandomRoom = async (io, socket) => {
 
         room.player_2 = socket.socketUserId;
         room.status = 'playing';
-        room.currentTurn = Math.floor(Math.random() * 2) + 1;
-        room.save();
+        room.fisrtTurn = Math.floor(Math.random() * 2) + 1;
+        await room.save();
 
         socket.emit('server-send-room', room.toString());
+        io.sockets.in(socket.socketRoomName).emit('server-init-game');
+        startGame(io, socket);
     }
     else {
         createNewRoom(io, socket);
     }
 }
 
-module.exports = { init, createNewRoom, joinRandomRoom, leaveAllRoom }
+module.exports = { init, createNewRoom, joinRandomRoom }

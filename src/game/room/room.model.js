@@ -8,7 +8,7 @@ var RoomSchema = new mongoose.Schema(
         player_2: Schema.Types.ObjectId,
         messages: [Schema.Types.ObjectId],
         winner: Schema.Types.ObjectId,
-        currentTurn: Number,
+        fisrtTurn: Number,
         status: String
     },
     {

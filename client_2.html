@@ -60,6 +60,8 @@
     <div id="current-room">Current room:</div>
     <button id="new-room">New room</button>
     <button id="play-now">Play now</button>
+    <button id="send-move">Send move</button>
+    
     <ul id="messages"></ul>
     <form action="">
         <input id="text" autocomplete="off" /><button>Send</button>
@@ -69,24 +71,39 @@
     <script>
         $(function () {
             var socket = io('http://localhost:3000');
-
+            var _id = '5dba84c437a25624d802c28c';
+            var name = 'Đặng Thanh Tuấn';
             var newMessage = {
                 message: "Tuấn's message"
             }
+
+            $('#send-move').prop( "disabled", true );
 
             $('form').submit(function () {
                 socket.emit('client-send-message', newMessage);
                 $('#text').val('');
                 return false;
             });
+
             $('#new-room').click(function () {
                 socket.emit('client-create-new-room');
                 return false;
             });
+
             $('#play-now').click(function () {
                 socket.emit('client-play-now');
                 return false;
             });
+
+            $('#send-move').click(function () {
+                var x = Math.floor(Math.random()*20);
+                var y = Math.floor(Math.random()*20);
+                var data = {x, y}
+                socket.emit('client-send-move', data);
+                $('#send-move').prop( "disabled", true );
+                return false;
+            });
+            
             socket.on('server-send-room', function (msg) {
                 $('#current-room').html('');
                 $('#current-room').append($('<span>').text('Current room: ' + msg));
@@ -97,10 +114,21 @@
             });
             socket.on('server-request-client-init-info', function () {
                 var data = {
-                    userId: '5dba84c437a25624d802c28c',
-                    name: 'Đặng Thanh Tuấn'
+                    userId: _id,
+                    name: name
                 }
                 socket.emit('client-send-init-info', data);
+            });
+
+            socket.on('server-init-game', function () {
+                // Chuyển sang giao diện chơi game
+            });
+
+            socket.on('server-send-turn', function (turn) {
+                // Cho phép đánh
+                if (turn === _id ){
+                    $('#send-move').prop( "disabled", false );
+                }
             });
         });
     </script>

@@ -6,8 +6,9 @@ const passport = require('./passport/passport');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
-const { sendMessages } = require('./room/chat/chat');
-const { init, createNewRoom, joinRandomRoom } = require('./room/room');
+const { sendMessages } = require('./game/chat/chat');
+const { init, createNewRoom, joinRandomRoom } = require('./game/room/room');
+const { updateBoard } = require('./game/game');
 
 const PORT = process.env.PORT || config.port;
 const app = express();
@@ -52,7 +53,8 @@ const server = app.listen(PORT, err => {
 
 const io = require('socket.io').listen(server);
 
-io.on('connection', socket => {    
+io.on('connection', socket => {
+
     socket.emit('server-request-client-init-info');
 
     socket.on('client-send-init-info', data => init(socket, data));
@@ -62,5 +64,6 @@ io.on('connection', socket => {
     socket.on('client-create-new-room', () => createNewRoom(io, socket));
 
     socket.on('client-play-now', () => joinRandomRoom(io, socket));
-    socket.in('adsd').emit()
+
+    socket.on('client-send-move', data => updateBoard(io, socket, data));
 })
