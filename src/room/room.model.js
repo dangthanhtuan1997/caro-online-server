@@ -3,12 +3,12 @@ const Schema = mongoose.Schema;
 
 var RoomSchema = new mongoose.Schema(
     {
-        number: Number,
+        name: String,
         player_1: Schema.Types.ObjectId,
         player_2: Schema.Types.ObjectId,
         messages: [Schema.Types.ObjectId],
         winner: Schema.Types.ObjectId,
-        currentTurn: Schema.Types.ObjectId,
+        currentTurn: Number,
         status: String
     },
     {

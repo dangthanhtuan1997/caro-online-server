@@ -59,7 +59,7 @@
 <body>
     <div id="current-room">Current room:</div>
     <button id="new-room">New room</button>
-    <button id="join-room">Join room</button>
+    <button id="play-now">Play now</button>
     <ul id="messages"></ul>
     <form action="">
         <input id="text" autocomplete="off" /><button>Send</button>
@@ -69,38 +69,38 @@
     <script>
         $(function () {
             var socket = io('http://localhost:3000');
-            var createRoom = {
-                userId: '5dba84c437a25624d802c28c'
-            }
-            var joinRoom = {
-                userId: '5dba84c437a25624d802c28c'
-            }
+
             var newMessage = {
-                roomId: '5dbbef13cd33b431acd584d3',
-                userId: '5dba84c437a25624d802c28c',
-                name: 'Đặng Thanh Tuấn',
                 message: "Tuấn's message"
             }
+
             $('form').submit(function () {
                 socket.emit('client-send-message', newMessage);
                 $('#text').val('');
                 return false;
             });
             $('#new-room').click(function () {
-                socket.emit('client-create-new-room', createRoom);
+                socket.emit('client-create-new-room');
                 return false;
             });
-            $('#join-room').click(function () {
-                socket.emit('client-join-room', joinRoom);
+            $('#play-now').click(function () {
+                socket.emit('client-play-now');
                 return false;
             });
-            socket.on('server-send-current-room', function (msg) {
+            socket.on('server-send-room', function (msg) {
                 $('#current-room').html('');
                 $('#current-room').append($('<span>').text('Current room: ' + msg));
             });
             socket.on('server-send-new-message', function (msg) {
                 $('#messages').append($('<li>').text(msg));
                 window.scrollTo(0, document.body.scrollHeight);
+            });
+            socket.on('server-request-client-init-info', function () {
+                var data = {
+                    userId: '5dba84c437a25624d802c28c',
+                    name: 'Đặng Thanh Tuấn'
+                }
+                socket.emit('client-send-init-info', data);
             });
         });
     </script>

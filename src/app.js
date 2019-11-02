@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const { sendMessages } = require('./room/chat/chat');
-const { createRoom } = require('./room/room');
+const { init, createNewRoom, joinRandomRoom } = require('./room/room');
 
 const PORT = process.env.PORT || config.port;
 const app = express();
@@ -52,10 +52,15 @@ const server = app.listen(PORT, err => {
 
 const io = require('socket.io').listen(server);
 
-io.on('connection', socket => {
-    console.log(socket.id + ' connected');
+io.on('connection', socket => {    
+    socket.emit('server-request-client-init-info');
+
+    socket.on('client-send-init-info', data => init(socket, data));
 
     socket.on('client-send-message', data => sendMessages(io, socket, data));
 
-    socket.on('client-create-new-room', data => createRoom(io,socket, data));
+    socket.on('client-create-new-room', () => createNewRoom(io, socket));
+
+    socket.on('client-play-now', () => joinRandomRoom(io, socket));
+    socket.in('adsd').emit()
 })
