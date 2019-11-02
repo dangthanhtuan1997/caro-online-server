@@ -7,8 +7,8 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const { sendMessages } = require('./game/chat/chat');
-const { init, createNewRoom, joinRandomRoom } = require('./game/room/room');
-const { updateBoard } = require('./game/game');
+const { init, createNewRoom, joinRandomRoom, leaveAllRoom } = require('./game/room/room');
+const { updateBoard, setPlayerStayIsWinner } = require('./game/game');
 
 const PORT = process.env.PORT || config.port;
 const app = express();
@@ -67,4 +67,10 @@ io.on('connection', socket => {
     socket.on('client-play-now', () => joinRandomRoom(io, socket));
 
     socket.on('client-send-move', data => updateBoard(io, socket, data));
+
+    socket.on('client-leave-room', () => leaveAllRoom(io, socket));
+
+    socket.on('client-exit-game', () => setPlayerStayIsWinner(io, socket));
+
+    socket.on('disconnect', () => setPlayerStayIsWinner(io, socket));
 })

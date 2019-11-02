@@ -73,4 +73,4 @@ const joinRandomRoom = async (io, socket) => {
     }
 }
 
-module.exports = { init, createNewRoom, joinRandomRoom }
+module.exports = { init, createNewRoom, joinRandomRoom, leaveAllRoom }

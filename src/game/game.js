@@ -31,4 +31,16 @@ const updateBoard = (io, socket, data) => {
     sendCurrentTurnToAllClient(io, socket);
 }
 
-module.exports = { startGame, sendCurrentTurnToAllClient, updateBoard }
+const setPlayerStayIsWinner = async (io, socket) => {
+    socket.leave(socket.socketRoomName);
+    var playerExit = socket.socketUserId;
+    var roomId = socket.adapter.rooms[socket.socketRoomName].roomId;
+    var room = await Room.findById(roomId);
+    if (room) {
+        room.winner = playerExit === room.player_1 ? room.player_2 : room.player_1;
+        room.status = 'end';
+        room.save();
+    }
+}
+
+module.exports = { startGame, sendCurrentTurnToAllClient, updateBoard, setPlayerStayIsWinner }
