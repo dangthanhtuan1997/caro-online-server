@@ -13,6 +13,8 @@ const { updateBoard } = require('./game/game');
 const PORT = process.env.PORT || config.port;
 const app = express();
 
+app.use('/uploads', express.static('uploads'));
+
 app.use(cors());
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -54,7 +56,6 @@ const server = app.listen(PORT, err => {
 const io = require('socket.io').listen(server);
 
 io.on('connection', socket => {
-
     socket.emit('server-request-client-init-info');
 
     socket.on('client-send-init-info', data => init(socket, data));
