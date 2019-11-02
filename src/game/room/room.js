@@ -31,8 +31,9 @@ const createNewRoom = async (io, socket) => {
     socket.socketRoomName = room.name;
     socket.socketRoomId = room._id;
 
-    //set _id for room
-    socket.adapter.rooms[socket.socketRoomName].RoomId = room._id;
+    //set _id for the room of 2 player
+    socket.adapter.rooms[socket.socketRoomName].roomId = room._id;
+    socket.adapter.rooms[socket.socketRoomName].player_1 = socket.socketUserId;
 
     socket.emit('server-send-room', room.name);
 }
@@ -47,7 +48,8 @@ const joinRandomRoom = async (io, socket) => {
             found = true;
 
             socket.socketRoomName = r;
-            socket.socketRoomId = io.sockets.adapter.rooms[r].RoomId;
+            socket.socketRoomId = io.sockets.adapter.rooms[r].roomId;
+            socket.adapter.rooms[socket.socketRoomName].player_2 = socket.socketUserId;
             socket.join(r);
 
             break;
@@ -55,14 +57,14 @@ const joinRandomRoom = async (io, socket) => {
     }
 
     if (found) {
-        var room = await Room.findById(socket.adapter.rooms[socket.socketRoomName].RoomId);
+        var room = await Room.findById(socket.adapter.rooms[socket.socketRoomName].roomId);
 
         room.player_2 = socket.socketUserId;
         room.status = 'playing';
         room.fisrtTurn = Math.floor(Math.random() * 2) + 1;
         await room.save();
 
-        socket.emit('server-send-room', room.toString());
+        socket.emit('server-send-room', room.name);
         io.sockets.in(socket.socketRoomName).emit('server-init-game');
         startGame(io, socket);
     }

@@ -61,7 +61,7 @@
     <button id="new-room">New room</button>
     <button id="play-now">Play now</button>
     <button id="send-move">Send move</button>
-    
+
     <ul id="messages"></ul>
     <form action="">
         <input id="text" autocomplete="off" /><button>Send</button>
@@ -77,7 +77,7 @@
                 message: "Tuấn's message"
             }
 
-            $('#send-move').prop( "disabled", true );
+            $('#send-move').prop("disabled", true);
 
             $('form').submit(function () {
                 socket.emit('client-send-message', newMessage);
@@ -96,14 +96,14 @@
             });
 
             $('#send-move').click(function () {
-                var x = Math.floor(Math.random()*20);
-                var y = Math.floor(Math.random()*20);
-                var data = {x, y}
+                var x = Math.floor(Math.random() * 20);
+                var y = Math.floor(Math.random() * 20);
+                var data = { x, y }
                 socket.emit('client-send-move', data);
-                $('#send-move').prop( "disabled", true );
+                $('#send-move').prop("disabled", true);
                 return false;
             });
-            
+
             socket.on('server-send-room', function (msg) {
                 $('#current-room').html('');
                 $('#current-room').append($('<span>').text('Current room: ' + msg));
@@ -125,9 +125,11 @@
             });
 
             socket.on('server-send-turn', function (turn) {
+                $('#messages').append($('<li>').text(turn));
+                window.scrollTo(0, document.body.scrollHeight);
                 // Cho phép đánh
-                if (turn === _id ){
-                    $('#send-move').prop( "disabled", false );
+                if (turn === _id) {
+                    $('#send-move').prop("disabled", false);
                 }
             });
         });
