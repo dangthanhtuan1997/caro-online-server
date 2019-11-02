@@ -61,6 +61,7 @@
     <button id="new-room">New room</button>
     <button id="play-now">Play now</button>
     <button id="send-move">Send move</button>
+    <button id="draw-game">Draw game</button>
 
     <ul id="messages"></ul>
     <form action="">
@@ -101,6 +102,11 @@
                 var data = { x, y }
                 socket.emit('client-send-move', data);
                 $('#send-move').prop("disabled", true);
+                return false;
+            });
+
+            $('#draw-game').click(function () {
+                socket.emit('client-request-draw-game');
                 return false;
             });
 

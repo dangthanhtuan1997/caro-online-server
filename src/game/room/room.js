@@ -61,7 +61,7 @@ const joinRandomRoom = async (io, socket) => {
 
         room.player_2 = socket.socketUserId;
         room.status = 'playing';
-        room.fisrtTurn = Math.floor(Math.random() * 2) + 1;
+        room.XFirst = Math.random() >= 0.5;
         await room.save();
 
         socket.emit('server-send-room', room.name);

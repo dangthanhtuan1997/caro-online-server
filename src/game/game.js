@@ -1,5 +1,15 @@
 const Room = require('./room/room.model');
 
+function clearRoom(io, room, namespace = '/') {
+    let roomObj = io.nsps[namespace].adapter.rooms[room];
+    if (roomObj) {
+        // now kick everyone out of this room
+        Object.keys(roomObj.sockets).forEach(function (id) {
+            io.sockets.connected[id].leave(room);
+        })
+    }
+}
+
 const startGame = async (io, socket) => {
     socket.adapter.rooms[socket.socketRoomName].currentBoard = Array.from(Array(20), () => new Array(20));
     socket.adapter.rooms[socket.socketRoomName].lastBoard = Array.from(Array(20), () => new Array(20));
@@ -8,9 +18,9 @@ const startGame = async (io, socket) => {
     socket.adapter.rooms[socket.socketRoomName].roomId = room._id;
     if (room) {
         socket.adapter.rooms[socket.socketRoomName].turns = [];
-        socket.adapter.rooms[socket.socketRoomName].turns.push(room.fisrtTurn);
+        socket.adapter.rooms[socket.socketRoomName].turns.push(room.XFirst);
 
-        if (room.fisrtTurn === 1) {
+        if (room.XFirst === true) {
             socket.in(socket.socketRoomName).broadcast.emit('server-enable-your-turn');
         }
         else {
@@ -22,6 +32,7 @@ const startGame = async (io, socket) => {
 const sendNextTurnToCompetitor = (io, socket) => {
     socket.in(socket.socketRoomName).broadcast.emit('server-enable-your-turn');
 }
+
 const updateBoard = (io, socket, data) => {
     // Player_1 default is 'X'
     if (socket.adapter.rooms[socket.socketRoomName].currentBoard[data.x][data.y] === undefined) {
@@ -49,6 +60,21 @@ const setPlayerStayIsWinner = async (io, socket) => {
         room.status = 'end';
         room.save();
     }
+
+    socket.in(socket.socketRoomName).broadcast.emit('you-are-winner');
 }
 
-module.exports = { startGame, updateBoard, setPlayerStayIsWinner }
+const endTheGameWithoutWinner = async (io, socket) => {
+    clearRoom(io, socket.socketRoomName);
+
+    var room = await Room.findById(socket.socketRoomId);
+
+    if (room) {
+        room.status = 'end';
+        room.save();
+    }
+
+    socket.in(socket.socketRoomName).emit('this-game-was-end-without-winner');
+}
+
+module.exports = { startGame, updateBoard, setPlayerStayIsWinner, endTheGameWithoutWinner }
