@@ -9,7 +9,10 @@ var UserSchema = new mongoose.Schema(
         sex: String,
         password: String,
         facebookId: String,
-        userImage: String,
+        userImage: {
+            type: String,
+            default: '/uploads/avatar_default.PNG'
+        },
         role: { type: String, default: 'user' }
     },
     {
