@@ -1,9 +1,5 @@
 const Room = require('./room/room.model');
 
-function exitWithoutPlayGame{
-    
-}
-
 function clearRoom(io, room, namespace = '/') {
     let roomObj = io.nsps[namespace].adapter.rooms[room];
     if (roomObj) {
@@ -53,18 +49,18 @@ const updateBoard = (io, socket, data) => {
 }
 
 const setPlayerStayIsWinner = async (io, socket) => {
-    if (socket.socketRoomName){
+    if (socket.socketRoomName) {
 
         var playerExit = socket.socketUserId;
         var roomId = socket.socketRoomId;
         var room = await Room.findById(roomId);
-    
+
         if (room) {
             room.winner = playerExit == room.player_1 ? room.player_2 : room.player_1;
             room.status = 'end';
             room.save();
         }
-    
+
         socket.in(socket.socketRoomName).broadcast.emit('you-are-winner');
         clearRoom(io, socket.socketRoomName);
     }
