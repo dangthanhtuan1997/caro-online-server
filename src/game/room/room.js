@@ -1,10 +1,12 @@
 const Room = require('./room.model');
-const {startGame} = require('../game');
+const { startGame } = require('../game');
 
 const init = (socket, data) => {
     socket.socketUserId = data.userId;
     socket.socketUserName = data.name;
     leaveAllRoom(socket);
+
+    console.log(socket.socketUserName + ' connected.');
 }
 
 const leaveAllRoom = (socket) => {
@@ -59,14 +61,16 @@ const joinRandomRoom = async (io, socket) => {
     if (found) {
         var room = await Room.findById(socket.adapter.rooms[socket.socketRoomName].roomId);
 
-        room.player_2 = socket.socketUserId;
-        room.status = 'playing';
-        room.XFirst = Math.random() >= 0.5;
-        await room.save();
+        if (room) {
+            room.player_2 = socket.socketUserId;
+            room.status = 'playing';
+            room.XFirst = Math.random() >= 0.5;
+            await room.save();
 
-        socket.emit('server-send-room', room.name);
-        io.sockets.in(socket.socketRoomName).emit('server-init-game');
-        startGame(io, socket);
+            socket.emit('server-send-room', room.name);
+            io.sockets.in(socket.socketRoomName).emit('server-init-game');
+            startGame(io, socket);
+        }
     }
     else {
         createNewRoom(io, socket);
