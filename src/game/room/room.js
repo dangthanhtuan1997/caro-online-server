@@ -4,15 +4,9 @@ const { startGame } = require('../game');
 const init = (socket, data) => {
     socket.socketUserId = data.userId;
     socket.socketUserName = data.name;
-    leaveAllRoom(socket);
-
+    socket.leaveAll(); 
     console.log(socket.socketUserName + ' connected.');
-}
-
-const leaveAllRoom = (socket) => {
-    for (r in socket.adapter.rooms) {
-        socket.leave(r);
-    }
+    socket.emit('server-init-success');
 }
 
 const createNewRoom = async (io, socket) => {
@@ -77,4 +71,4 @@ const joinRandomRoom = async (io, socket) => {
     }
 }
 
-module.exports = { init, createNewRoom, joinRandomRoom, leaveAllRoom }
+module.exports = { init, createNewRoom, joinRandomRoom }
