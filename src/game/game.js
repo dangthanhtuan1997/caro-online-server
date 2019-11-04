@@ -75,6 +75,25 @@ const setPlayerStayIsWinner = async (io, socket) => {
     }
 }
 
+const setCompetitor = async (io, socket) => {
+    // If player has join a room
+    if (socket.socketRoomName) {
+
+        var playerSurrender = socket.socketUserId;
+        var roomId = socket.socketRoomId;
+        var room = await Room.findById(roomId);
+
+        if (room) {
+            room.winner = playerSurrender == room.player_1 ? room.player_2 : room.player_1;
+            room.status = 'end';
+            room.save();
+        }
+
+        socket.in(socket.socketRoomName).broadcast.emit('competitor-surrender-you-are-winner');
+        clearRoom(io, socket.socketRoomName);
+    }
+}
+
 const endTheGameWithoutWinner = async (io, socket, data) => {
     if (data === 'yes') {
         var room = await Room.findById(socket.socketRoomId);
@@ -94,4 +113,4 @@ const sendDrawRequestToCompetitor = (io, socket) => {
     socket.in(socket.socketRoomName).broadcast.emit('competitor-want-a-draw-game', socket.socketUserName);
 }
 
-module.exports = { startGame, updateBoard, setPlayerStayIsWinner, sendDrawRequestToCompetitor, endTheGameWithoutWinner }
+module.exports = { startGame, updateBoard, setPlayerStayIsWinner, sendDrawRequestToCompetitor, endTheGameWithoutWinner, setCompetitor }

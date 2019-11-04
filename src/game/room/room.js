@@ -48,9 +48,6 @@ const createNewRoom = async (io, socket) => {
         namePlayer1: socket.socketUserName,
         imagePlayer1: socket.socketUserImage
     }
-
-    console.log(res);
-
     socket.emit('server-send-room', res);
 }
 
@@ -69,7 +66,6 @@ const joinRandomRoom = async (io, socket) => {
             socket.adapter.rooms[socket.socketRoomName].namePlayer2 = socket.socketUserName;
             socket.adapter.rooms[socket.socketRoomName].imagePlayer2 = socket.socketUserImage;
             socket.join(r);
-            console.log(socket.adapter.rooms[socket.socketRoomName]);
             break;
         }
     }

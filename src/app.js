@@ -8,7 +8,7 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const { sendMessages } = require('./game/chat/chat');
 const { init, createNewRoom, joinRandomRoom } = require('./game/room/room');
-const { updateBoard, setPlayerStayIsWinner,sendDrawRequestToCompetitor,  endTheGameWithoutWinner } = require('./game/game');
+const { updateBoard, setPlayerStayIsWinner,sendDrawRequestToCompetitor,  endTheGameWithoutWinner, setCompetitor } = require('./game/game');
 
 const PORT = process.env.PORT || config.port;
 const app = express();
@@ -74,6 +74,8 @@ io.on('connection', socket => {
     socket.on('client-answer-draw-game', data => endTheGameWithoutWinner(io, socket, data));
 
     socket.on('client-ask-draw-game', () => sendDrawRequestToCompetitor(io, socket));
+
+    socket.on('client-surrender', () => sendDrawRequestToCompetitor(io, socket));
     
     socket.on('client-exit-game', () => setPlayerStayIsWinner(io, socket));
 
