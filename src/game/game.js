@@ -35,6 +35,9 @@ const sendNextTurnToCompetitor = (io, socket) => {
 
 const updateBoard = (io, socket, data) => {
     // Player_1 default is 'X'
+    if (!socket.adapter.rooms[socket.socketRoomName]) {
+        return;
+    }
     if (socket.adapter.rooms[socket.socketRoomName].currentBoard[data.x][data.y] === undefined) {
         socket.adapter.rooms[socket.socketRoomName].lastBoard = socket.adapter.rooms[socket.socketRoomName].currentBoard;
 
@@ -49,6 +52,8 @@ const updateBoard = (io, socket, data) => {
 }
 
 const setPlayerStayIsWinner = async (io, socket) => {
+    console.log(socket.socketUserName + ' disconnect.');
+
     if (socket.socketRoomName) {
 
         var playerExit = socket.socketUserId;
@@ -64,7 +69,6 @@ const setPlayerStayIsWinner = async (io, socket) => {
         socket.in(socket.socketRoomName).broadcast.emit('you-are-winner');
         clearRoom(io, socket.socketRoomName);
     }
-    console.log(socket.socketUserName + ' disconnect.');
 }
 
 const endTheGameWithoutWinner = async (io, socket, data) => {

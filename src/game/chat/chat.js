@@ -2,6 +2,9 @@ const Room = require('.././room/room.model');
 const Message = require('../chat/message.model');
 
 const sendMessages = async (io, socket, data) => {
+    if (!socket.adapter.rooms[socket.socketRoomName]) {
+        return;
+    }
     io.sockets.in(socket.socketRoomName).emit('server-send-new-message', data.message.toString());
 
     var newMessage = new Message({
