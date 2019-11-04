@@ -69,13 +69,13 @@ const setPlayerStayIsWinner = async (io, socket) => {
             room.status = 'end';
             room.save();
         }
-
+        io.sockets.in(socket.socketRoomName).emit('server-send-new-message', 'This game was end.');
         socket.in(socket.socketRoomName).broadcast.emit('competitor-exit-you-are-winner');
         clearRoom(io, socket.socketRoomName);
     }
 }
 
-const setCompetitor = async (io, socket) => {
+const setCompetitorIsWinner = async (io, socket) => {
     // If player has join a room
     if (socket.socketRoomName) {
 
@@ -88,7 +88,7 @@ const setCompetitor = async (io, socket) => {
             room.status = 'end';
             room.save();
         }
-
+        io.sockets.in(socket.socketRoomName).emit('server-send-new-message', 'This game was end.');
         socket.in(socket.socketRoomName).broadcast.emit('competitor-surrender-you-are-winner');
         clearRoom(io, socket.socketRoomName);
     }
@@ -113,4 +113,4 @@ const sendDrawRequestToCompetitor = (io, socket) => {
     socket.in(socket.socketRoomName).broadcast.emit('competitor-want-a-draw-game', socket.socketUserName);
 }
 
-module.exports = { startGame, updateBoard, setPlayerStayIsWinner, sendDrawRequestToCompetitor, endTheGameWithoutWinner, setCompetitor }
+module.exports = { startGame, updateBoard, setPlayerStayIsWinner, sendDrawRequestToCompetitor, endTheGameWithoutWinner, setCompetitorIsWinner }
