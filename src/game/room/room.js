@@ -1,10 +1,12 @@
 const Room = require('./room.model');
 const { startGame } = require('../game');
 
-const init = (socket, data) => {
+const init = (io,socket, data) => {
     socket.socketUserId = data.userId;
     socket.socketUserName = data.name;
-    socket.leaveAll(); 
+    
+    socket.leaveAll();
+
     console.log(socket.socketUserName + ' connected.');
     socket.emit('server-init-success');
 }
@@ -31,7 +33,7 @@ const createNewRoom = async (io, socket) => {
     socket.adapter.rooms[socket.socketRoomName].roomId = room._id;
     socket.adapter.rooms[socket.socketRoomName].player_1 = socket.socketUserId;
 
-    socket.emit('server-send-room', room.toString());
+    socket.emit('server-send-room', room);
 }
 
 const joinRandomRoom = async (io, socket) => {
@@ -39,8 +41,8 @@ const joinRandomRoom = async (io, socket) => {
 
     for (r in io.sockets.adapter.rooms) {
         var clientNumber = io.sockets.adapter.rooms[r].length;
-
-        if (clientNumber === 1) {
+        
+        if (r.split('-')[0] === 'room' && clientNumber === 1) {
             found = true;
 
             socket.socketRoomName = r;
@@ -61,7 +63,7 @@ const joinRandomRoom = async (io, socket) => {
             room.XFirst = Math.random() >= 0.5;
             await room.save();
 
-            io.sockets.in(socket.socketRoomName).emit('server-send-room', room.toString());
+            io.sockets.in(socket.socketRoomName).emit('server-send-room', room);
             io.sockets.in(socket.socketRoomName).emit('server-init-game');
             startGame(io, socket);
         }

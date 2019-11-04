@@ -11,7 +11,7 @@ var UserSchema = new mongoose.Schema(
         facebookId: String,
         userImage: {
             type: String,
-            default: '/uploads/avatar_default.PNG'
+            default: '/uploads/default_avatar.png'
         },
         role: { type: String, default: 'user' }
     },
