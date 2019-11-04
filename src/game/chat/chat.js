@@ -5,7 +5,7 @@ const sendMessages = async (io, socket, data) => {
     if (!socket.adapter.rooms[socket.socketRoomName]) {
         return;
     }
-    io.sockets.in(socket.socketRoomName).emit('server-send-new-message', data.message.toString());
+    socket.in(socket.socketRoomName).broadcast.emit('server-send-new-message', data.message.toString());
 
     var newMessage = new Message({
         userId: socket.socketUserId,
