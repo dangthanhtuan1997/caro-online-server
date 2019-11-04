@@ -41,7 +41,7 @@ const updateBoard = (io, socket, data) => {
     if (socket.adapter.rooms[socket.socketRoomName].currentBoard[data.x][data.y] === undefined) {
         socket.adapter.rooms[socket.socketRoomName].lastBoard = socket.adapter.rooms[socket.socketRoomName].currentBoard;
 
-        if (socket.socketUserId === socket.adapter.rooms[socket.socketRoomName].player_1) {
+        if (socket.socketUserId === socket.adapter.rooms[socket.socketRoomName].idPlayer1) {
             socket.adapter.rooms[socket.socketRoomName].currentBoard[data.x][data.y] = 'X';
         } else {
             socket.adapter.rooms[socket.socketRoomName].currentBoard[data.x][data.y] = 'O';
