@@ -49,11 +49,15 @@ const updateBoard = (io, socket, data) => {
         sendNextTurnToCompetitor(io, socket);
         io.sockets.in(socket.socketRoomName).emit('server-send-new-message', socket.socketUserName + ' đánh: ' + data.x + ';' + data.y);
     }
+    else{
+        socket.emit('do-not-cheat-this-game');
+    }
 }
 
 const setPlayerStayIsWinner = async (io, socket) => {
     console.log(socket.socketUserName + ' disconnect.');
 
+    // If player has join a room
     if (socket.socketRoomName) {
 
         var playerExit = socket.socketUserId;
@@ -66,7 +70,7 @@ const setPlayerStayIsWinner = async (io, socket) => {
             room.save();
         }
 
-        socket.in(socket.socketRoomName).broadcast.emit('you-are-winner');
+        socket.in(socket.socketRoomName).broadcast.emit('competitor-exit-you-are-winner');
         clearRoom(io, socket.socketRoomName);
     }
 }
