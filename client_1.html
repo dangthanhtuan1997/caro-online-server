@@ -169,18 +169,8 @@
 
             socket.on('competitor-want-a-draw-game', function (data) {
                 $('#notification').html('');
-                $('#notification').append($('<span>').text(data + ' want a draw game?'));
+                $('#notification').append($('<span>').text('competior want a draw game?'));
                 $('#new-notification').show();
-            });
-
-            socket.on('competitor-exit-you-are-winner', function () {
-                $('#messages').append($('<li>').text('Competitor exit. You won!'));
-                window.scrollTo(0, document.body.scrollHeight);
-            });
-
-            socket.on('competitor-surrender-you-are-winner', function () {
-                $('#messages').append($('<li>').text('Competitor surrender. You won!'));
-                window.scrollTo(0, document.body.scrollHeight);
             });
         });
     </script>
