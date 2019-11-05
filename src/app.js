@@ -63,19 +63,19 @@ io.on('connection', socket => {
     
     socket.emit('server-request-client-init-info');
 
-    socket.on('client-send-init-info', data => init(socket, data));
+    socket.on('client-send-init-info', info => init(socket, info));
 
-    socket.on('client-send-message', data => sendMessages(io, socket, data));
+    socket.on('client-send-message', message => sendMessages(io, socket, message));
 
     socket.on('client-create-new-room', () => createNewRoom(io, socket));
 
     socket.on('client-play-now', () => joinRandomRoom(io, socket));
 
-    socket.on('client-send-move', data => updateBoard(io, socket, data));
+    socket.on('client-send-move', move => updateBoard(io, socket, move));
 
     socket.on('client-leave-room', () => socket.leaveAll());
 
-    socket.on('client-answer-draw-game', data => endTheGameWithoutWinner(io, socket, data));
+    socket.on('client-answer-draw-game', answer => endTheGameWithoutWinner(io, socket, answer));
 
     socket.on('client-ask-draw-game', () => sendDrawRequestToCompetitor(io, socket));
 

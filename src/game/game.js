@@ -64,12 +64,12 @@ const setCompetitorIsWinner = async (io, socket, info) => {
     // If player has join a room
     if (socket.socketRoomName) {
 
-        var playerSurrender = socket.socketUserId;
+        var playerLose = socket.socketUserId;
         var roomId = socket.socketRoomId;
         var room = await Room.findById(roomId);
 
         if (room) {
-            room.winner = playerSurrender == room.player_1 ? room.player_2 : room.player_1;
+            room.winner = playerLose == room.player_1 ? room.player_2 : room.player_1;
             room.status = 'end';
             room.save();
         }
@@ -79,10 +79,10 @@ const setCompetitorIsWinner = async (io, socket, info) => {
             socket.in(socket.socketRoomName).broadcast.emit('server-send-new-message', {message: 'Your competitor exit game. Your are winner!', owner: 'server' });
         }
         else if (info === 'surrender') {
-            socket.in(socket.socketRoomName).broadcast.emit('server-send-new-message', {message: 'Your competitor surrender game. Your are winner!', owner: 'server' });
+            socket.in(socket.socketRoomName).broadcast.emit('server-send-new-message', {message: 'Your competitor surrender. Your are winner!', owner: 'server' });
         }
         else if (info === 'disconnect') {
-            socket.in(socket.socketRoomName).broadcast.emit('server-send-new-message', {message: 'Your competitor disconnect game. Your are winner!', owner: 'server' });
+            socket.in(socket.socketRoomName).broadcast.emit('server-send-new-message', {message: 'Your competitor disconnect. Your are winner!', owner: 'server' });
         }
         else if (info === 'lose') {
             socket.in(socket.socketRoomName).broadcast.emit('server-send-new-message', {message: 'Your won!', owner: 'server' });
@@ -96,12 +96,12 @@ const setCompetitorIsWinner = async (io, socket, info) => {
     }
 }
 
-const endTheGameWithoutWinner = async (io, socket, data) => {
+const endTheGameWithoutWinner = async (io, socket, answer) => {
     if (!socket.adapter.rooms[socket.socketRoomName]) {
         return;
     }
 
-    if (data === 'yes') {
+    if (answer === 'yes') {
         var room = await Room.findById(socket.socketRoomId);
 
         if (room) {
