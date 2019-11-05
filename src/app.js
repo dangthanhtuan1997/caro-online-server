@@ -8,7 +8,7 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const { sendMessages } = require('./game/chat/chat');
 const { init, createNewRoom, joinRandomRoom } = require('./game/room/room');
-const { updateBoard, setPlayerStayIsWinner,sendDrawRequestToCompetitor,  endTheGameWithoutWinner, setCompetitorIsWinner } = require('./game/game');
+const { updateBoard,sendDrawRequestToCompetitor,  endTheGameWithoutWinner, setCompetitorIsWinner } = require('./game/game');
 
 const PORT = process.env.PORT || config.port;
 const app = express();
@@ -53,6 +53,10 @@ const server = app.listen(PORT, err => {
     console.log('App running at port: ' + PORT);
 });
 
+app.use('/', (req, res) =>{
+    res.sendFile(__dirname + '/index.html')
+})
+
 const io = require('socket.io').listen(server);
 
 io.on('connection', socket => {
@@ -75,9 +79,11 @@ io.on('connection', socket => {
 
     socket.on('client-ask-draw-game', () => sendDrawRequestToCompetitor(io, socket));
 
-    socket.on('client-surrender', () => setCompetitorIsWinner(io, socket));
+    socket.on('client-surrender', () => setCompetitorIsWinner(io, socket, 'surrender'));
     
-    socket.on('client-exit-game', () => setPlayerStayIsWinner(io, socket));
+    socket.on('client-exit-game', () => setCompetitorIsWinner(io, socket, 'exit'));
 
-    socket.on('disconnect', () => setPlayerStayIsWinner(io, socket));
+    socket.on('client-lose-game', () => setCompetitorIsWinner(io, socket, 'lose'));
+
+    socket.on('disconnect', () => setCompetitorIsWinner(io, socket, 'disconnect'));
 })
