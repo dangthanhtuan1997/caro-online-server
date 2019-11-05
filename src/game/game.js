@@ -75,6 +75,7 @@ const setCompetitorIsWinner = async (io, socket, info) => {
         else if (info === 'surrender') {
             socket.in(socket.socketRoomName).broadcast.emit('competitor-surrender-you-are-winner');
         }
+
         else if (info === 'disconnect') {
             socket.in(socket.socketRoomName).broadcast.emit('competitor-disconnect-you-are-winner');
         }
@@ -82,8 +83,9 @@ const setCompetitorIsWinner = async (io, socket, info) => {
             socket.in(socket.socketRoomName).broadcast.emit('competitor-lose-you-are-winner');
         }
 
+        io.sockets.in(socket.socketRoomName).emit('the-game-was-end');
         clearRoom(io, socket.socketRoomName);
-    }
+    }8
 }
 
 const endTheGameWithoutWinner = async (io, socket, data) => {
@@ -96,13 +98,14 @@ const endTheGameWithoutWinner = async (io, socket, data) => {
         }
 
         io.sockets.in(socket.socketRoomName).emit('server-send-new-message', 'This game was end without winner');
+        io.sockets.in(socket.socketRoomName).emit('the-game-was-end');
 
         clearRoom(io, socket.socketRoomName);
     }
 }
 
 const sendDrawRequestToCompetitor = (io, socket) => {
-    socket.in(socket.socketRoomName).broadcast.emit('competitor-want-a-draw-game', socket.socketUserName);
+    socket.in(socket.socketRoomName).broadcast.emit('competitor-want-a-draw-game');
 }
 
 module.exports = { startGame, updateBoard, sendDrawRequestToCompetitor, endTheGameWithoutWinner, setCompetitorIsWinner }
