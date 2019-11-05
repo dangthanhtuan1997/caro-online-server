@@ -140,12 +140,12 @@
                 return false;
             });
 
-            socket.on('server-send-room', function (msg) {
+            socket.on('server-send-room', function (room) {
                 $('#current-room').html('');
-                $('#current-room').append($('<span>').text('Current room: ' + msg));
+                $('#current-room').append($('<span>').text('Current room: ' + room));
             });
             socket.on('server-send-new-message', function (msg) {
-                $('#messages').append($('<li>').text(msg));
+                $('#messages').append($('<li>').text(msg.message));
                 window.scrollTo(0, document.body.scrollHeight);
             });
             socket.on('server-request-client-init-info', function () {

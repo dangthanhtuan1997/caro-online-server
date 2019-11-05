@@ -5,7 +5,7 @@ const sendMessages = async (io, socket, data) => {
     if (!socket.adapter.rooms[socket.socketRoomName]) {
         return;
     }
-    socket.in(socket.socketRoomName).broadcast.emit('server-send-new-message', data.message);
+    socket.in(socket.socketRoomName).broadcast.emit('server-send-new-message', { message: data, owner: 'competitor' });
 
     var newMessage = new Message({
         userId: socket.socketUserId,

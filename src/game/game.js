@@ -24,7 +24,7 @@ const startGame = async (io, socket) => {
             socket.in(socket.socketRoomName).broadcast.emit('server-enable-your-turn');
         }
         else {
-            socket.emit('server-enable-your-turn');
+            socket.emit('server-enable-your-turn', {});
         }
     }
 }
@@ -47,7 +47,6 @@ const updateBoard = (io, socket, data) => {
             socket.adapter.rooms[socket.socketRoomName].currentBoard[data.x][data.y] = 'O';
         }
         sendNextTurnToCompetitor(io, socket, data);
-        io.sockets.in(socket.socketRoomName).emit('server-send-new-message', socket.socketUserName + ' đánh: ' + data.x + ';' + data.y);
     }
     else {
         socket.emit('do-not-cheat-this-game');
@@ -67,7 +66,7 @@ const setCompetitorIsWinner = async (io, socket, info) => {
             room.status = 'end';
             room.save();
         }
-        io.sockets.in(socket.socketRoomName).emit('server-send-new-message', 'This game was end.');
+        io.sockets.in(socket.socketRoomName).emit('server-send-new-message', {message: 'This game was end.', owner: 'server' });
 
         if (info === 'exit') {
             socket.in(socket.socketRoomName).broadcast.emit('competitor-exit-you-are-winner');
@@ -97,15 +96,19 @@ const endTheGameWithoutWinner = async (io, socket, data) => {
             room.save();
         }
 
-        io.sockets.in(socket.socketRoomName).emit('server-send-new-message', 'This game was end without winner');
+        io.sockets.in(socket.socketRoomName).emit('server-send-new-message', {message: 'This game was end without winner.', owner: 'server' });
         io.sockets.in(socket.socketRoomName).emit('the-game-was-end');
 
         clearRoom(io, socket.socketRoomName);
+    }
+    else{
+        socket.in(socket.socketRoomName).broadcast.emit('server-send-new-message', {message: 'Your competitor not accept draw game!', owner: 'server' });
     }
 }
 
 const sendDrawRequestToCompetitor = (io, socket) => {
     socket.in(socket.socketRoomName).broadcast.emit('competitor-want-a-draw-game');
+    socket.emit('server-send-new-message', {message: 'Your request sent!', owner: 'server' });
 }
 
 module.exports = { startGame, updateBoard, sendDrawRequestToCompetitor, endTheGameWithoutWinner, setCompetitorIsWinner }
