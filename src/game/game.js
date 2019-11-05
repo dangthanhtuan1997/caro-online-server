@@ -69,16 +69,16 @@ const setCompetitorIsWinner = async (io, socket, info) => {
         
 
         if (info === 'exit') {
-            io.sockets.in(socket.socketRoomName).emit('server-send-new-message', {message: 'Your competitor exit game. Your are winner!', owner: 'server' });
+            socket.in(socket.socketRoomName).broadcast.emit('server-send-new-message', {message: 'Your competitor exit game. Your are winner!', owner: 'server' });
         }
         else if (info === 'surrender') {
-            io.sockets.in(socket.socketRoomName).emit('server-send-new-message', {message: 'Your competitor surrender game. Your are winner!', owner: 'server' });
+            socket.in(socket.socketRoomName).broadcast.emit('server-send-new-message', {message: 'Your competitor surrender game. Your are winner!', owner: 'server' });
         }
         else if (info === 'disconnect') {
-            io.sockets.in(socket.socketRoomName).emit('server-send-new-message', {message: 'Your competitor disconnect game. Your are winner!', owner: 'server' });
+            socket.in(socket.socketRoomName).broadcast.emit('server-send-new-message', {message: 'Your competitor disconnect game. Your are winner!', owner: 'server' });
         }
         else if (info === 'lose') {
-            io.sockets.in(socket.socketRoomName).emit('server-send-new-message', {message: 'Your won!', owner: 'server' });
+            socket.in(socket.socketRoomName).broadcast.emit('server-send-new-message', {message: 'Your won!', owner: 'server' });
         }
 
         io.sockets.in(socket.socketRoomName).emit('server-send-new-message', {message: 'This game was end.', owner: 'server' });
