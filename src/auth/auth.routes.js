@@ -6,6 +6,7 @@ const passport = require('../passport/passport');
 const User = require('../user/user.model');
 const config = require('../config/config');
 const fetch = require('node-fetch');
+const querystring = require('querystring');
 
 const clientId = '515923430857-91lh880df1vo0ssqvk91ooup3dpsg5or.apps.googleusercontent.com'
 const clientSecret = 'dFzYFYV8uxW4PwzdLJN4LjZG'
@@ -58,7 +59,47 @@ module.exports = (app) => {
         )
         const tokenJson = await tokenResponse.json();
         const userInfo = await getUserInfo(tokenJson.access_token);
-        res.redirect(`http://localhost:3000?${Object.keys(userInfo).map(key => `${key}=${encodeURIComponent(userInfo[key])}`).join('&')}`)
+
+        if (userInfo){
+            existUser = await User.findOne({ googleId: userInfo.id });
+            if (existUser) {
+                const userModified = existUser.toObject();
+                const token = jwt.sign(userModified, config.jwtSecret, { expiresIn: '7d' });
+                //return res.status(200).json({ userModified, token });
+
+                const query = querystring.stringify({
+                    "name": userModified.name,
+                    "googleId" : userModified.googleId,
+                    "email": userModified.email,
+                    "userImage": userModified.userImage
+                });
+                //return res.redirect(`http://localhost:3000?${Object.keys(userInfo).map(key => `${key}=${encodeURIComponent(userInfo[key])}`).join('&')}`)
+
+                return res.redirect('http://localhost:3000?' + query);
+            }
+            const newUser = new User({
+                name: userInfo.name,
+                googleId: userInfo.id,
+                email: userInfo.email,
+                userImage: userInfo.picture
+            });
+            newUser.save((err, user) => {
+                if (err) { return res.status(500).json(err) }
+                const userModified = user.toObject();
+                const token = jwt.sign(userModified, config.jwtSecret, { expiresIn: '7d' });
+                //return res.status(201).json({ userModified, token });
+                
+                const query = querystring.stringify({
+                    "a": 1,
+                    "b": 2,
+                    "valid":"your string here"
+                });
+                return res.redirect('http://localhost:3000?' + query);
+                
+                //res.redirect(`http://localhost:3000?${Object.keys(user).map(key => `${key}=${encodeURIComponent(user[key])}`).join('&')}`)
+            });
+        }
+
     });
 
     async function getUserInfo(accessToken) {

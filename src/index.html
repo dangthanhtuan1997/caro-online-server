@@ -14,7 +14,7 @@
 </head>
 
 <body>
-    <a id="link" target="_blank"><button>Login with Google</button></a>
+    <a id="link"><button>Login with Google</button></a>
     <div id="user-info-wrapper">
         <img width="50" />
         <p></p>
@@ -23,12 +23,11 @@
     </div>
     <script type="text/javascript">
         const urlParams = new URLSearchParams(window.location.search)
-        if (urlParams.get('id')) {
+        if (urlParams.get('name')) {
             document.querySelector('#link').style.display = 'none'
-            document.querySelector('img').src = urlParams.get('picture')
-            document.querySelectorAll('p')[0].innerHTML = `Hi, ${urlParams.get('given_name')}!`
-            document.querySelectorAll('p')[1].innerHTML = `Full name: ${urlParams.get('name')}`
-            document.querySelectorAll('p')[2].innerHTML = `Email: ${urlParams.get('email')}`
+            document.querySelector('img').src = urlParams.get('userImage')
+            document.querySelectorAll('p')[0].innerHTML = `Full name: ${urlParams.get('name')}`
+            document.querySelectorAll('p')[1].innerHTML = `Email: ${urlParams.get('email')}`
         } else {
             document.querySelector('#user-info-wrapper').style.display = 'none'
         }
