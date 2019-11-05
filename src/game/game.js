@@ -30,6 +30,10 @@ const startGame = async (io, socket) => {
 }
 
 const sendNextTurnToCompetitor = (io, socket, data) => {
+    if (!socket.adapter.rooms[socket.socketRoomName]) {
+        return;
+    }
+    
     socket.in(socket.socketRoomName).broadcast.emit('server-enable-your-turn', data);
 }
 
@@ -54,6 +58,9 @@ const updateBoard = (io, socket, data) => {
 }
 
 const setCompetitorIsWinner = async (io, socket, info) => {
+    if (!socket.adapter.rooms[socket.socketRoomName]) {
+        return;
+    }
     // If player has join a room
     if (socket.socketRoomName) {
 
@@ -86,10 +93,14 @@ const setCompetitorIsWinner = async (io, socket, info) => {
         io.sockets.in(socket.socketRoomName).emit('the-game-was-end');
         
         clearRoom(io, socket.socketRoomName);
-    }8
+    }
 }
 
 const endTheGameWithoutWinner = async (io, socket, data) => {
+    if (!socket.adapter.rooms[socket.socketRoomName]) {
+        return;
+    }
+
     if (data === 'yes') {
         var room = await Room.findById(socket.socketRoomId);
 
@@ -109,6 +120,10 @@ const endTheGameWithoutWinner = async (io, socket, data) => {
 }
 
 const sendDrawRequestToCompetitor = (io, socket) => {
+    if (!socket.adapter.rooms[socket.socketRoomName]) {
+        return;
+    }
+
     socket.in(socket.socketRoomName).broadcast.emit('competitor-want-a-draw-game');
     socket.emit('server-send-new-message', {message: 'Your request sent!', owner: 'server' });
 }
