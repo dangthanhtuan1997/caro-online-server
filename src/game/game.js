@@ -29,8 +29,8 @@ const startGame = async (io, socket) => {
     }
 }
 
-const sendNextTurnToCompetitor = (io, socket) => {
-    socket.in(socket.socketRoomName).broadcast.emit('server-enable-your-turn');
+const sendNextTurnToCompetitor = (io, socket, data) => {
+    socket.in(socket.socketRoomName).broadcast.emit('server-enable-your-turn', data);
 }
 
 const updateBoard = (io, socket, data) => {
@@ -46,7 +46,7 @@ const updateBoard = (io, socket, data) => {
         } else {
             socket.adapter.rooms[socket.socketRoomName].currentBoard[data.x][data.y] = 'O';
         }
-        sendNextTurnToCompetitor(io, socket);
+        sendNextTurnToCompetitor(io, socket, data);
         io.sockets.in(socket.socketRoomName).emit('server-send-new-message', socket.socketUserName + ' đánh: ' + data.x + ';' + data.y);
     }
     else {

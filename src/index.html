@@ -28,6 +28,7 @@
             document.querySelector('img').src = urlParams.get('userImage')
             document.querySelectorAll('p')[0].innerHTML = `Full name: ${urlParams.get('name')}`
             document.querySelectorAll('p')[1].innerHTML = `Email: ${urlParams.get('email')}`
+            document.querySelectorAll('p')[2].innerHTML = `Token: ${urlParams.get('token')}`
         } else {
             document.querySelector('#user-info-wrapper').style.display = 'none'
         }
