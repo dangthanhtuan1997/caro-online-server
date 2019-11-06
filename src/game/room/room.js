@@ -90,10 +90,15 @@ const joinRandomRoom = async (io, socket) => {
 
             const res = {
                 room: room.name,
+                
                 namePlayer1: socket.adapter.rooms[socket.socketRoomName].namePlayer1,
                 imagePlayer1: socket.adapter.rooms[socket.socketRoomName].imagePlayer1,
+                idPlayer1: socket.adapter.rooms[socket.socketRoomName].idPlayer1,
+
                 namePlayer2: socket.adapter.rooms[socket.socketRoomName].namePlayer2,
                 imagePlayer2: socket.adapter.rooms[socket.socketRoomName].imagePlayer2,
+                idPlayer2: socket.adapter.rooms[socket.socketRoomName].idPlayer2,
+
                 XFirst: room.XFirst
             }
 
