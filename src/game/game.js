@@ -36,6 +36,8 @@ const verifyMove = (io, socket, move) => {
 
         io.sockets.in(socket.socketRoomName).emit('server-send-move', { move, symbol: socket.socketSymbol });
 
+        io.sockets.in(socket.socketRoomName).emit('server-send-new-message', { message: `${socket.socketUserName} set ${socket.socketSymbol} at ${move.x};${move.y}`, owner: 'server' });
+
         socket.adapter.rooms[socket.socketRoomName].turn = socket.socketSymbol === 'X' ? 'O' : 'X';
     }
 }
