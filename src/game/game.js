@@ -18,6 +18,13 @@ const startGame = async (io, socket) => {
     socket.adapter.rooms[socket.socketRoomName].roomId = room._id;
     socket.adapter.rooms[socket.socketRoomName].turn = room.XFirst ? 'X' : 'O';
 
+    if (socket.adapter.rooms[socket.socketRoomName].turn == socket.socketSymbol) {
+        socket.emit('server-enable-your-turn');
+    }
+    else {
+        socket.in(socket.socketRoomName).broadcast.emit('server-enable-your-turn');
+    }
+
     io.sockets.in(socket.socketRoomName).emit('server-init-game-success');
 }
 
@@ -39,6 +46,8 @@ const verifyMove = (io, socket, move) => {
         io.sockets.in(socket.socketRoomName).emit('server-send-new-message', { message: `${socket.socketUserName} set ${socket.socketSymbol} at ${move.x};${move.y}`, owner: 'server' });
 
         socket.adapter.rooms[socket.socketRoomName].turn = socket.socketSymbol === 'X' ? 'O' : 'X';
+
+        socket.in(socket.socketRoomName).broadcast.emit('server-enable-your-turn');
     }
 }
 
