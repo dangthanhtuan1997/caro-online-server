@@ -3,8 +3,14 @@ const User = require('../../user/user.model');
 const { startGame } = require('../game');
 
 const init = (socket, info) => {
+    if (!info) {
+        socket.disconnect();
+        return;
+    }
+
     User.findById(info.userId, (err, user) => {
-        if (err) {
+        if (err || !user) {
+            socket.disconnect();
             return;
         }
 
@@ -14,8 +20,9 @@ const init = (socket, info) => {
 
         socket.leaveAll();
 
-        socket.emit('server-init-success');
+        socket.emit('server-init-your-info-success');
     });
+
     console.log(info.name + ' connected.');
 }
 
@@ -89,7 +96,7 @@ const joinRandomRoom = async (io, socket) => {
                 imagePlayer2: socket.adapter.rooms[socket.socketRoomName].imagePlayer2,
                 XFirst: room.XFirst
             }
-            
+
             io.sockets.in(socket.socketRoomName).emit('server-send-room', res);
             startGame(io, socket);
         }
