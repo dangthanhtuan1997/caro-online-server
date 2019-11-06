@@ -21,16 +21,7 @@ const startGame = async (io, socket) => {
     io.sockets.in(socket.socketRoomName).emit('server-init-game-success');
 }
 
-const sendMove = (io, socket, move) => {
-    if (!socket.adapter.rooms[socket.socketRoomName]) {
-        return;
-    }
-
-    io.sockets.in(socket.socketRoomName).emit('server-send-move', { move, symbol: socket.socketSymbol });
-}
-
-const updateBoard = (io, socket, move) => {
-    // Player_1 default is 'X'
+const verifyMove = (io, socket, move) => {
     if (!socket.adapter.rooms[socket.socketRoomName]) {
         return;
     }
@@ -43,7 +34,7 @@ const updateBoard = (io, socket, move) => {
 
         socket.adapter.rooms[socket.socketRoomName].currentBoard[move.x][move.y] = socket.socketSymbol;
 
-        sendMove(io, socket, move);
+        io.sockets.in(socket.socketRoomName).emit('server-send-move', { move, symbol: socket.socketSymbol });
 
         socket.adapter.rooms[socket.socketRoomName].turn = socket.socketSymbol === 'X' ? 'O' : 'X';
     }
@@ -120,4 +111,4 @@ const sendDrawRequestToCompetitor = (io, socket) => {
     socket.emit('server-send-new-message', { message: 'Your request sent!', owner: 'server' });
 }
 
-module.exports = { startGame, updateBoard, sendDrawRequestToCompetitor, endTheGameWithoutWinner, setCompetitorIsWinner }
+module.exports = { startGame, verifyMove, sendDrawRequestToCompetitor, endTheGameWithoutWinner, setCompetitorIsWinner }
