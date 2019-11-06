@@ -36,6 +36,7 @@ const createNewRoom = async (io, socket) => {
 
     socket.socketRoomName = room.name;
     socket.socketRoomId = room._id;
+    socket.socketSymbol = 'X';
 
     //set _id for the room of 2 player
     socket.adapter.rooms[socket.socketRoomName].roomId = room._id;
@@ -60,6 +61,7 @@ const joinRandomRoom = async (io, socket) => {
         if (r.split('-')[0] === 'room' && clientNumber === 1) {
             found = true;
 
+            socket.socketSymbol = 'O';
             socket.socketRoomName = r;
             socket.socketRoomId = io.sockets.adapter.rooms[r].roomId;
             socket.adapter.rooms[socket.socketRoomName].idPlayer2 = socket.socketUserId;
@@ -84,11 +86,11 @@ const joinRandomRoom = async (io, socket) => {
                 namePlayer1: socket.adapter.rooms[socket.socketRoomName].namePlayer1,
                 imagePlayer1: socket.adapter.rooms[socket.socketRoomName].imagePlayer1,
                 namePlayer2: socket.adapter.rooms[socket.socketRoomName].namePlayer2,
-                imagePlayer2: socket.adapter.rooms[socket.socketRoomName].imagePlayer2
+                imagePlayer2: socket.adapter.rooms[socket.socketRoomName].imagePlayer2,
+                XFirst: room.XFirst
             }
             
             io.sockets.in(socket.socketRoomName).emit('server-send-room', res);
-            io.sockets.in(socket.socketRoomName).emit('server-init-game');
             startGame(io, socket);
         }
     }
