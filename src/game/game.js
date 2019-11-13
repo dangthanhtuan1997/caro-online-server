@@ -68,7 +68,6 @@ const setCompetitorIsWinner = async (io, socket, info) => {
             room.save();
         }
 
-
         if (info === 'exit') {
             socket.in(socket.socketRoomName).broadcast.emit('server-send-new-message', { message: 'Your competitor exit game. Your are winner!', owner: 'server' });
         }
@@ -80,7 +79,7 @@ const setCompetitorIsWinner = async (io, socket, info) => {
         }
         else if (info === 'lose') {
             socket.in(socket.socketRoomName).broadcast.emit('server-send-new-message', { message: 'You won!', owner: 'server' });
-            socket.emit('server-send-new-message', { message: 'Your lost!', owner: 'server' });
+            socket.emit('server-send-new-message', { message: 'You lost!', owner: 'server' });
         }
 
         io.sockets.in(socket.socketRoomName).emit('server-send-new-message', { message: 'This game was end.', owner: 'server' });

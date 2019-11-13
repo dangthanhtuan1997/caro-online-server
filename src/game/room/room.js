@@ -57,11 +57,11 @@ const createNewRoom = async (io, socket) => {
         imagePlayer1: socket.socketUserImage
     }
     socket.emit('server-send-room', res);
+    socket.emit('server-send-new-message', {message: 'Please waiting other player...', owner: 'server'});
 }
 
 const joinRandomRoom = async (io, socket) => {
     var found = false;
-
     for (r in io.sockets.adapter.rooms) {
         var clientNumber = io.sockets.adapter.rooms[r].length;
 

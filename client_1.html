@@ -63,7 +63,7 @@
     <button id="send-move">Send move</button>
     <button id="draw-game">Xin hòa</button>
     <button id="surrender">Đầu hàng</button>
-    
+
     <div id="new-notification">
         <span id="notification"></span>
         <button id="yes">Yes</button>
@@ -78,7 +78,7 @@
     <script>
         $(function () {
             var socket = io('http://localhost:3000');
-            var _id = '5dc2580dde1a9610a0f508a3';
+            var _id = '5dc2a32ac615411f90a8b9ac';
             var name = 'Nguyễn Sĩ Văn';
             var newMessage = "Văn's message";
 
@@ -161,7 +161,7 @@
             });
 
             socket.on('server-send-move', function (turn) {
-                $('#messages').append($('<li>').text(turn.move.x + ';' + turn.move.y + ' ' + turn.symbol ));
+                $('#messages').append($('<li>').text(turn.move.x + ';' + turn.move.y + ' ' + turn.symbol));
                 window.scrollTo(0, document.body.scrollHeight);
             });
 

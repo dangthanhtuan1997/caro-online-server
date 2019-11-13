@@ -11,18 +11,11 @@ const sendMessages = async (io, socket, message) => {
     var newMessage = new Message({
         userId: socket.socketUserId,
         name: socket.socketUserName,
-        message: message.message
+        message: message
     })
 
-    var message = await newMessage.save();
-    var room = await Room.findById(socket.socketRoomId);
-    
-    if (room) {
-        var mess = [...room.messages];
-        mess.push(message._id);
-        room.messages = mess;
-        room.save();
-    }
+    const mess = await newMessage.save();
+    Room.update({ _id: socket.socketRoomId }, { $push: { 'messages': mess._id } }).exec();
 }
 
 module.exports = { sendMessages }
