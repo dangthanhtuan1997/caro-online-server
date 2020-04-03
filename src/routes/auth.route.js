@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const passport = require('../passport/passport');
 const User = require('../model/user.model');
-const config = require('../config/config');
+const config = require('../config');
 const fetch = require('node-fetch');
 const querystring = require('querystring');
 
@@ -119,9 +119,6 @@ module.exports = (app) => {
     }
 
     router.post('/register', (req, res) => {
-        if (req.body.password == '') {
-            return res.status(401).json({ message: 'Password is empty' });
-        }
         if (req.body.password.length < 6) {
             return res
                 .status(401)

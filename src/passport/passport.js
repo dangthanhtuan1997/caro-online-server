@@ -1,6 +1,6 @@
 const passport = require('passport');
 const bcrypt = require('bcrypt');
-const config = require('../config/config');
+const config = require('../config');
 const User = require('../model/user.model');
 
 const passportJWT = require('passport-jwt');

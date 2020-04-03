@@ -3,7 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const passport = require('../passport/passport');
 const User = require('../model/user.model');
-const config = require('../config/config');
+const config = require('../config');
 
 module.exports = (app) => {
     app.use('/users', router);
@@ -13,9 +13,6 @@ module.exports = (app) => {
     });
 
     router.post('/update', passport.authenticate('jwt', { session: false }), (req, res) => {
-        if (req.body.newPassword == '') {
-            return res.status(401).json({ message: 'Password is empty' });
-        }
         if (req.body.newPassword.length < 6) {
             return res.status(401).json({ message: 'Passwords must be at least 6 characters' });
         }
@@ -28,7 +25,7 @@ module.exports = (app) => {
                     name: req.body.name,
                     email: req.body.email,
                     dateOfBirth: req.body.dateOfBirth,
-                    sex: req.body.sex,
+                    gender: req.body.gender,
                     password: hash
                 }
             };

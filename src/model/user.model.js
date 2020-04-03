@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 var UserSchema = new mongoose.Schema(
     {
@@ -6,10 +7,11 @@ var UserSchema = new mongoose.Schema(
         name: String,
         email: String,
         dateOfBirth: String,
-        sex: String,
+        gender: String,
         password: String,
         facebookId: String,
         googleId: String,
+        voucher: [Schema.Types.ObjectId],
         userImage: {
             type: String,
             default: '/uploads/default_avatar.png'

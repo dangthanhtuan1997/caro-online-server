@@ -2,7 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 require('express-async-errors');
 const bodyParser = require('body-parser');
-const config = require('./config/config');
+const config = require('./config');
 const routes = require('./routes');
 const passport = require('./passport/passport');
 const mongoose = require('mongoose');

@@ -2,7 +2,7 @@ POST http://localhost:3000/api/auth/login
 Content-Type: application/json
 
 {
-    "username" : "nguyensivan1",
+    "username" : "nguyensivan",
     "password" : "123456"
 }
 
@@ -11,11 +11,11 @@ POST http://localhost:3000/api/auth/register
 Content-Type: application/json
 
 {
-    "username" : "nguyensivan1",
+    "username" : "nguyensivan",
     "name": "Nguyễn Sĩ Văn",
     "email": "nguyensivan1998@gmail.com",
     "dateOfBirth": "11/04/1998",
-    "sex": "nu",
+    "gender": "female",
     "password" : "123456",
     "confirmPassword": "123456"
 }
@@ -31,7 +31,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW1hZ2UiOiIvd
 
 {
     "_id" : "5e86aed956415c46547416ce",
-    "username" : "nguyensivan1",
+    "username" : "nguyensivan",
     "name": "Nguyễn Sĩ Văn",
     "email": "nguyensivan1998@gmail.com",
     "dateOfBirth": "11/04/1997",
