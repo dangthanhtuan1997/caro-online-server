@@ -1,4 +1,4 @@
-const Room = require('./room/room.model');
+const Room = require('../model/room.model');
 
 function clearRoom(io, room, namespace = '/') {
     let roomObj = io.nsps[namespace].adapter.rooms[room];

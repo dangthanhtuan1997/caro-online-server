@@ -1,7 +1,9 @@
 const express = require('express');
+const morgan = require('morgan');
+require('express-async-errors');
 const bodyParser = require('body-parser');
 const config = require('./config/config');
-const routes = require('./api');
+const routes = require('./routes');
 const passport = require('./passport/passport');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
@@ -44,13 +46,22 @@ mongoose.connect(config.databaseURL, {
     process.exit();
 });
 
+app.use((req, res, next) => {
+    res.status(404).send('NOT FOUND');
+})
+
+app.use(function (err, req, res, next) {
+    console.log(err.stack);
+    res.status(500).send('Error on server');
+})
+
 const server = app.listen(PORT, err => {
     if (err) {
         console.log(err);
         process.exit(1);
         return;
     }
-    console.log('App running at port: ' + PORT);
+    console.log('App is running at port: ' + PORT);
 });
 
 const io = require('socket.io').listen(server);

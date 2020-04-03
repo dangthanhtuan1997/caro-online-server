@@ -1,5 +1,5 @@
-const Room = require('.././room/room.model');
-const Message = require('../chat/message.model');
+const Room = require('../../model/room.model');
+const Message = require('../../model/message.model');
 
 const sendMessages = async (io, socket, message) => {
     if (!socket.adapter.rooms[socket.socketRoomName]) {

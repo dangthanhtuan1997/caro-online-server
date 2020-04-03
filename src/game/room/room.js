@@ -1,5 +1,5 @@
-const Room = require('./room.model');
-const User = require('../../user/user.model');
+const Room = require('../../model/room.model');
+const User = require('../../model/user.model');
 const { startGame } = require('../game');
 
 const init = (socket, info) => {

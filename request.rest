@@ -2,7 +2,7 @@ POST http://localhost:3000/api/auth/login
 Content-Type: application/json
 
 {
-    "username" : "nguyensivan",
+    "username" : "nguyensivan1",
     "password" : "123456"
 }
 
@@ -11,7 +11,7 @@ POST http://localhost:3000/api/auth/register
 Content-Type: application/json
 
 {
-    "username" : "nguyensivan",
+    "username" : "nguyensivan1",
     "name": "Nguyễn Sĩ Văn",
     "email": "nguyensivan1998@gmail.com",
     "dateOfBirth": "11/04/1998",
@@ -22,16 +22,16 @@ Content-Type: application/json
 
 ###
 GET http://localhost:3000/api/users/me
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoidXNlciIsIl9pZCI6IjVkYjkzNTg2YTRlOGFhM2M4MGVhNjVhYyIsInVzZXJuYW1lIjoibmd1eWVuc2l2YW4iLCJuYW1lIjoibmd1eeG7hW4gc8SpIHbEg24iLCJlbWFpbCI6Im5ndXllbnNpdmFuMTk5OEBnbWFpbC5jb20iLCJkYXRlT2ZCaXJ0aCI6IjExLzA0LzE5OTgiLCJzZXgiOiJu4buvIiwiY3JlYXRlZEF0IjoiMjAxOS0xMC0zMFQwNzowMjozMC44MjdaIiwidXBkYXRlZEF0IjoiMjAxOS0xMC0zMVQxNjo1NDozMC45MjFaIiwiX192IjowLCJ1c2VySW1hZ2UiOiIvdXBsb2Fkcy9hdmF0YXJfNWRiOTM1ODZhNGU4YWEzYzgwZWE2NWFjIiwiaWF0IjoxNTcyNTgxMDE5LCJleHAiOjE1NzMxODU4MTl9.vOmfLnVVMwDsFByAoGfCinfKEXAB3NfZ61J-tv5BBYE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW1hZ2UiOiIvdXBsb2Fkcy9kZWZhdWx0X2F2YXRhci5wbmciLCJyb2xlIjoidXNlciIsIl9pZCI6IjVlODZhZWQ5NTY0MTVjNDY1NDc0MTZjZSIsInVzZXJuYW1lIjoibmd1eWVuc2l2YW4xIiwibmFtZSI6Ik5ndXnhu4VuIFPEqSBWxINuIiwiZW1haWwiOiJuZ3V5ZW5zaXZhbjE5OThAZ21haWwuY29tIiwiZGF0ZU9mQmlydGgiOiIxMS8wNC8xOTk4Iiwic2V4IjoibnUiLCJjcmVhdGVkQXQiOiIyMDIwLTA0LTAzVDAzOjM0OjQ5Ljk3OVoiLCJ1cGRhdGVkQXQiOiIyMDIwLTA0LTAzVDAzOjM0OjQ5Ljk3OVoiLCJfX3YiOjAsImlhdCI6MTU4NTg4NDg5NiwiZXhwIjoxNTg2NDg5Njk2fQ.hx_DaWRIcsXnDDWF1W00yx58zQdUdV0T4MoM2wzxdPg
 
 ###
 POST http://localhost:3000/api/users/update
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoidXNlciIsIl9pZCI6IjVkYjkzNTg2YTRlOGFhM2M4MGVhNjVhYyIsInVzZXJuYW1lIjoibmd1eWVuc2l2YW4iLCJuYW1lIjoibmd1eeG7hW4gc8SpIHbEg24iLCJlbWFpbCI6Im5ndXllbnNpdmFuMTk5OEBnbWFpbC5jb20iLCJkYXRlT2ZCaXJ0aCI6IjExLzA0LzE5OTgiLCJzZXgiOiJu4buvIiwiY3JlYXRlZEF0IjoiMjAxOS0xMC0zMFQwNzowMjozMC44MjdaIiwidXBkYXRlZEF0IjoiMjAxOS0xMC0zMVQxNjo1NDozMC45MjFaIiwiX192IjowLCJ1c2VySW1hZ2UiOiIvdXBsb2Fkcy9hdmF0YXJfNWRiOTM1ODZhNGU4YWEzYzgwZWE2NWFjIiwiaWF0IjoxNTcyNTgxMDE5LCJleHAiOjE1NzMxODU4MTl9.vOmfLnVVMwDsFByAoGfCinfKEXAB3NfZ61J-tv5BBYE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW1hZ2UiOiIvdXBsb2Fkcy9kZWZhdWx0X2F2YXRhci5wbmciLCJyb2xlIjoidXNlciIsIl9pZCI6IjVlODZhZWQ5NTY0MTVjNDY1NDc0MTZjZSIsInVzZXJuYW1lIjoibmd1eWVuc2l2YW4xIiwibmFtZSI6Ik5ndXnhu4VuIFPEqSBWxINuIiwiZW1haWwiOiJuZ3V5ZW5zaXZhbjE5OThAZ21haWwuY29tIiwiZGF0ZU9mQmlydGgiOiIxMS8wNC8xOTk4Iiwic2V4IjoibnUiLCJjcmVhdGVkQXQiOiIyMDIwLTA0LTAzVDAzOjM0OjQ5Ljk3OVoiLCJ1cGRhdGVkQXQiOiIyMDIwLTA0LTAzVDAzOjM0OjQ5Ljk3OVoiLCJfX3YiOjAsImlhdCI6MTU4NTg4NDg5NiwiZXhwIjoxNTg2NDg5Njk2fQ.hx_DaWRIcsXnDDWF1W00yx58zQdUdV0T4MoM2wzxdPg
 
 {
-    "_id" : "5db93586a4e8aa3c80ea65ac",
-    "username" : "nguyensivan",
+    "_id" : "5e86aed956415c46547416ce",
+    "username" : "nguyensivan1",
     "name": "Nguyễn Sĩ Văn",
     "email": "nguyensivan1998@gmail.com",
     "dateOfBirth": "11/04/1997",
